@@ -11,9 +11,7 @@ from dotenv import dotenv_values
 
 def _get_realtimex_server_dir() -> Path:
 	"""Return the RealTimeX server directory using platform-safe joins."""
-	user_home = os.path.expanduser('~')
-	absolute_path = os.path.join(user_home, '.realtimex.ai', 'Resources', 'server')
-	return Path(absolute_path)
+	return Path.home() / '.realtimex.ai' / 'Resources' / 'server'
 
 
 # Default RealTimeX configuration directory
