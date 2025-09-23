@@ -93,6 +93,7 @@ from browser_use.browser import BrowserProfile, BrowserSession
 from browser_use.config import get_default_llm, get_default_profile, load_browser_use_config
 from browser_use.filesystem.file_system import FileSystem
 from browser_use.llm.openai.chat import ChatOpenAI
+from browser_use.realtimex import load_realtimex_env
 from browser_use.tools.service import Tools
 
 logger = logging.getLogger(__name__)
@@ -188,6 +189,9 @@ class BrowserUseServer:
 	def __init__(self, session_timeout_minutes: int = 10):
 		# Ensure all logging goes to stderr (in case new loggers were created)
 		_ensure_all_loggers_use_stderr()
+
+		# Load RealTimeX environment variables
+		load_realtimex_env()
 
 		self.server = Server('browser-use')
 		self.config = load_browser_use_config()
