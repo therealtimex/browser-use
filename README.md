@@ -121,7 +121,7 @@ This gives Claude Desktop access to browser automation tools for web scraping, f
   "mcpServers": {
     "browser-use": {
       "command": "uvx",
-      "args": ["browser-use[cli]", "--mcp"],
+      "args": ["realtimex-browser-use[cli]", "--mcp"],
       "env": {
         "OPENAI_API_KEY": "sk-..."
       }
