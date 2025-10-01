@@ -84,8 +84,8 @@ def _auto_detect_provider(model_name: str) -> str | None:
 	prefix_hints = {
 		'claude-': 'anthropic',
 		'gemini-': 'google',
-		'gpt2-': 'ollama',  # Ollama-specific naming
-		'llama3': 'ollama',  # Ollama-specific naming (e.g., llama3.1:8b)
+		'llama': 'ollama',  # Ollama-specific naming (e.g., llama3.1:8b)
+		'gemma': 'ollama',  # Ollama-specific naming (e.g., gemma3:4b)
 		'deepseek-': 'deepseek',
 	}
 
