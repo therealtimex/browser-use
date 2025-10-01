@@ -60,13 +60,35 @@ load_dotenv()
 
 agent = Agent(
     task="Find the number of stars of the browser-use repo",
-    llm=ChatGoogle(model="gemini-2.5-flash"),
+    llm=ChatGoogle(model="gemini-flash-latest"),
     # browser=Browser(use_cloud=True),  # Uses Browser-Use cloud for the browser
 )
 agent.run_sync()
 ```
 
 Check out the [library docs](https://docs.browser-use.com) and [cloud docs](https://docs.cloud.browser-use.com) for more settings.
+
+
+## Stealth Browser Infrastructure
+
+Want to bypass Cloudflare, or any other anti-bot protection?
+
+Simply go to [Browser Use Cloud](https://docs.cloud.browser-use.com) grab a `BROWSER_USE_API_KEY` and use the `use_cloud` parameter.
+
+```python
+from browser_use import Agent, Browser, ChatOpenAI
+
+# Use Browser-Use cloud browser service
+browser = Browser(
+    use_cloud=True,  # Automatically provisions a cloud browser
+)
+
+agent = Agent(
+    task="Your task here",
+    llm=ChatOpenAI(model='gpt-4.1-mini'),
+    browser=browser,
+)
+```
 
 
 
