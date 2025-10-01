@@ -3,7 +3,8 @@ name: Publish to MCP Registry
 on:
   push:
     tags:
-      - 'v*'  # Trigger on version tags (e.g., v1.0.0, v0.7.11)
+      - 'v*'
+      - 'v*.*.*'
   release:
     types: [published]
   workflow_dispatch:
@@ -22,9 +23,15 @@ jobs:
       - name: Extract version from tag or pyproject.toml
         id: version
         run: |
-          if [ "${{ github.ref_type }}" == "tag" ]; then
+          echo "Event: ${{ github.event_name }}"
+          echo "Ref: ${{ github.ref }}"
+          echo "Ref type: ${{ github.ref_type }}"
+
+          if [[ "${{ github.ref }}" == refs/tags/* ]]; then
             # Extract version from git tag (remove 'v' prefix if present)
-            VERSION="${GITHUB_REF#refs/tags/v}"
+            VERSION="${{ github.ref }}"
+            VERSION="${VERSION#refs/tags/v}"
+            VERSION="${VERSION#refs/tags/}"
             echo "Version from tag: $VERSION"
           elif [ "${{ github.event_name }}" == "release" ]; then
             VERSION="${{ github.event.release.tag_name }}"
@@ -46,7 +53,7 @@ jobs:
 
       - name: Install MCP Publisher
         run: |
-          curl -L "https://github.com/modelcontextprotocol/registry/releases/download/v1.1.0/mcp-publisher_1.1.0_$(uname -s | tr '[:upper:]' '[:lower:]')_$(uname -m | sed 's/x86_64/amd64/;s/aarch64/arm64/').tar.gz" | tar xz mcp-publisher
+          curl -L "https://github.com/modelcontextprotocol/registry/releases/download/v1.2.3/mcp-publisher_1.2.3_$(uname -s | tr '[:upper:]' '[:lower:]')_$(uname -m | sed 's/x86_64/amd64/;s/aarch64/arm64/').tar.gz" | tar xz mcp-publisher
 
       - name: Login to MCP Registry
         run: ./mcp-publisher login github-oidc
