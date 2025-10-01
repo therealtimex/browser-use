@@ -33,45 +33,47 @@ def parse_model_string(model_string: str) -> tuple[str | None, str]:
 def _get_provider_info(provider: str) -> tuple[type[BaseChatModel], str | list[str] | None, dict[str, str]]:
 	"""Get provider class, required credentials, and extra params.
 
+	Uses lazy imports via browser_use.llm.__getattr__ to avoid loading unused providers.
+
 	Returns:
 		(chat_class, required_keys, extra_params)
 	"""
-	# Lazy imports to avoid circular dependencies
-	from browser_use.llm.anthropic.chat import ChatAnthropic
-	from browser_use.llm.aws.chat_anthropic import ChatAnthropicBedrock
-	from browser_use.llm.aws.chat_bedrock import ChatAWSBedrock
-	from browser_use.llm.azure.chat import ChatAzureOpenAI
-	from browser_use.llm.google.chat import ChatGoogle
-	from browser_use.llm.groq.chat import ChatGroq
-	from browser_use.llm.ollama.chat import ChatOllama
-	from browser_use.llm.openai.chat import ChatOpenAI
-
-	provider_map: dict[str, tuple[type[BaseChatModel], str | list[str] | None, dict[str, str]]] = {
-		'openai': (ChatOpenAI, 'OPENAI_API_KEY', {}),
-		'azure': (ChatAzureOpenAI, 'AZURE_OPENAI_KEY', {'azure_endpoint': 'AZURE_OPENAI_ENDPOINT'}),
-		'anthropic': (ChatAnthropic, 'ANTHROPIC_API_KEY', {}),
-		'aws_bedrock': (ChatAWSBedrock, ['AWS_ACCESS_KEY_ID', 'AWS_SECRET_ACCESS_KEY'], {'aws_region': 'AWS_DEFAULT_REGION'}),
+	# Provider metadata: class_name → (required_env_keys, extra_params_map)
+	# - required_env_keys: env var name(s) for API keys (str for single, list for multiple, None for optional)
+	# - extra_params_map: {constructor_param: env_var_name} for provider-specific config
+	provider_metadata: dict[str, tuple[str, str | list[str] | None, dict[str, str]]] = {
+		'openai': ('ChatOpenAI', 'OPENAI_API_KEY', {}),
+		'azure': ('ChatAzureOpenAI', 'AZURE_OPENAI_KEY', {'azure_endpoint': 'AZURE_OPENAI_ENDPOINT'}),
+		'anthropic': ('ChatAnthropic', 'ANTHROPIC_API_KEY', {}),
+		'aws_bedrock': ('ChatAWSBedrock', ['AWS_ACCESS_KEY_ID', 'AWS_SECRET_ACCESS_KEY'], {'aws_region': 'AWS_DEFAULT_REGION'}),
 		'aws_bedrock_anthropic': (
-			ChatAnthropicBedrock,
+			'ChatAnthropicBedrock',
 			['AWS_ACCESS_KEY_ID', 'AWS_SECRET_ACCESS_KEY'],
 			{'aws_region': 'AWS_DEFAULT_REGION'},
 		),
-		'google': (ChatGoogle, 'GOOGLE_API_KEY', {}),
-		'groq': (ChatGroq, 'GROQ_API_KEY', {}),
-		'ollama': (ChatOllama, None, {'base_url': 'OLLAMA_BASE_URL'}),
-		'deepseek': (ChatOpenAI, 'DEEPSEEK_API_KEY', {'base_url': 'https://api.deepseek.com'}),
-		'openrouter': (ChatOpenAI, 'OPENROUTER_API_KEY', {'base_url': 'https://openrouter.ai/api/v1'}),
+		'google': ('ChatGoogle', 'GOOGLE_API_KEY', {}),
+		'groq': ('ChatGroq', 'GROQ_API_KEY', {}),
+		'ollama': ('ChatOllama', None, {'base_url': 'OLLAMA_BASE_URL'}),
+		'deepseek': ('ChatOpenAI', 'DEEPSEEK_API_KEY', {'base_url': 'https://api.deepseek.com'}),
+		'openrouter': ('ChatOpenAI', 'OPENROUTER_API_KEY', {'base_url': 'https://openrouter.ai/api/v1'}),
 	}
 
-	if provider not in provider_map:
-		available = ', '.join(sorted(provider_map.keys()))
+	if provider not in provider_metadata:
+		available = ', '.join(sorted(provider_metadata.keys()))
 		raise ValueError(
 			f"Unknown provider: '{provider}'\n"
 			f'Available providers: {available}\n'
 			f"Use format: 'provider/model' or set BROWSER_USE_LLM_PROVIDER"
 		)
 
-	return provider_map[provider]
+	class_name, required_keys, extra_params = provider_metadata[provider]
+
+	# Lazy import via browser_use.llm.__getattr__
+	import browser_use.llm
+
+	chat_class = getattr(browser_use.llm, class_name)
+
+	return chat_class, required_keys, extra_params
 
 
 def _auto_detect_provider(model_name: str) -> str | None:
