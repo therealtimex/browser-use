@@ -2,7 +2,7 @@
 name = "realtimex-browser-use"
 description = "Make websites accessible for AI agents (RealTimeX fork of browser-use)"
 authors = [{ name = "Gregor Zunic" }, { name = "RealTimeX" }]
-version = "0.7.10.dev2"
+version = "0.7.10.dev4"
 readme = "README.md"
 requires-python = ">=3.11,<4.0"
 classifiers = [
