@@ -4,7 +4,6 @@ on:
   push:
     tags:
       - 'v*'
-      - 'v*.*.*'
   release:
     types: [published]
   workflow_dispatch:
@@ -23,15 +22,9 @@ jobs:
       - name: Extract version from tag or pyproject.toml
         id: version
         run: |
-          echo "Event: ${{ github.event_name }}"
-          echo "Ref: ${{ github.ref }}"
-          echo "Ref type: ${{ github.ref_type }}"
-
-          if [[ "${{ github.ref }}" == refs/tags/* ]]; then
+          if [ "${{ github.ref_type }}" == "tag" ]; then
             # Extract version from git tag (remove 'v' prefix if present)
-            VERSION="${{ github.ref }}"
-            VERSION="${VERSION#refs/tags/v}"
-            VERSION="${VERSION#refs/tags/}"
+            VERSION="${GITHUB_REF#refs/tags/v}"
             echo "Version from tag: $VERSION"
           elif [ "${{ github.event_name }}" == "release" ]; then
             VERSION="${{ github.event.release.tag_name }}"

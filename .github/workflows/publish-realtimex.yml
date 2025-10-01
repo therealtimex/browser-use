@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - realtimex-main
-      - realtimex-dev
   workflow_dispatch:
 
 permissions:
