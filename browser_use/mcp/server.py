@@ -93,6 +93,7 @@ from browser_use.browser import BrowserProfile, BrowserSession
 from browser_use.config import get_default_llm, get_default_profile, load_browser_use_config
 from browser_use.filesystem.file_system import FileSystem
 from browser_use.llm.base import BaseChatModel
+from browser_use.llm.registry import create_chat_model_from_string
 from browser_use.tools.service import Tools
 
 logger = logging.getLogger(__name__)
@@ -552,8 +553,6 @@ class BrowserUseServer:
 		# Initialize LLM from config
 		llm_config = get_default_llm(self.config)
 		if model_name := llm_config.get('model'):
-			from browser_use.llm.registry import create_chat_model_from_string
-
 			self.llm = create_chat_model_from_string(
 				model=model_name,
 				config=llm_config,
@@ -576,8 +575,6 @@ class BrowserUseServer:
 	) -> str:
 		"""Run an autonomous agent task."""
 		logger.debug(f'Running agent task: {task}')
-
-		from browser_use.llm.registry import create_chat_model_from_string
 
 		# Get LLM config
 		llm_config = get_default_llm(self.config)
