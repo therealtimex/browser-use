@@ -6,6 +6,8 @@
 
 <h1 align="center">Enable AI to control your browser</h1>
 
+<!-- mcp-name: io.github.therealtimex/browser-use -->
+
 [![Docs](https://img.shields.io/badge/Docs-📕-blue?style=for-the-badge)](https://docs.browser-use.com)
 [![Browser-use cloud](https://img.shields.io/badge/Browser_Use_Cloud-☁️-blue?style=for-the-badge&logo=rocket&logoColor=white)](https://cloud.browser-use.com)
 
@@ -119,7 +121,7 @@ This gives Claude Desktop access to browser automation tools for web scraping, f
   "mcpServers": {
     "browser-use": {
       "command": "uvx",
-      "args": ["browser-use[cli]", "--mcp"],
+      "args": ["realtimex-browser-use[cli]", "--mcp"],
       "env": {
         "OPENAI_API_KEY": "sk-..."
       }

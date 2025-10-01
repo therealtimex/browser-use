@@ -1,0 +1,42 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-09-29/server.schema.json",
+  "name": "io.github.therealtimex/browser-use",
+  "description": "AI browser automation - navigate, click, type, extract content, and run autonomous web tasks",
+  "version": "{{VERSION}}",
+  "repository": {
+    "url": "https://github.com/therealtimex/browser-use",
+    "source": "github",
+    "subfolder": "browser_use/mcp"
+  },
+  "packages": [
+    {
+      "registryType": "pypi",
+      "identifier": "realtimex-browser-use",
+      "version": "{{VERSION}}",
+      "runtimeHint": "uvx",
+      "transport": {
+        "type": "stdio"
+      },
+      "runtimeArguments": [
+        {
+          "type": "positional",
+          "value": "realtimex-browser-use[cli]@{{VERSION}}"
+        }
+      ],
+      "packageArguments": [
+        {
+          "type": "positional",
+          "value": "--mcp"
+        }
+      ],
+      "environmentVariables": [
+        {
+          "name": "OPENAI_API_KEY",
+          "description": "OpenAI API key for LLM operations",
+          "isRequired": true,
+          "isSecret": true
+        }
+      ]
+    }
+  ]
+}
