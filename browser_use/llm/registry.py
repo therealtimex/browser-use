@@ -53,7 +53,7 @@ def _get_provider_info(provider: str) -> tuple[type[BaseChatModel], str | list[s
 		),
 		'google': ('ChatGoogle', 'GOOGLE_API_KEY', {}),
 		'groq': ('ChatGroq', 'GROQ_API_KEY', {}),
-		'ollama': ('ChatOllama', None, {'base_url': 'OLLAMA_BASE_URL'}),
+		'ollama': ('ChatOllama', None, {'host': 'OLLAMA_BASE_URL'}),
 		'deepseek': ('ChatOpenAI', 'DEEPSEEK_API_KEY', {'base_url': 'https://api.deepseek.com'}),
 		'openrouter': ('ChatOpenAI', 'OPENROUTER_API_KEY', {'base_url': 'https://openrouter.ai/api/v1'}),
 	}
