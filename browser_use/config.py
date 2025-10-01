@@ -265,15 +265,10 @@ class LLMEntry(DBStyleEntry):
 	"""
 
 	model: str | None = None
-	provider: str | None = None  # Optional explicit provider
+	provider: str | None = None
 	api_key: str | None = None
 	temperature: float | None = None
 	max_tokens: int | None = None
-
-	# Provider-specific extras
-	azure_endpoint: str | None = None  # For Azure OpenAI
-	base_url: str | None = None  # For OpenAI-compatible APIs
-	aws_region: str | None = None  # For AWS Bedrock
 
 
 class AgentEntry(DBStyleEntry):
