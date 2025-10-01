@@ -6,6 +6,8 @@
 
 <h1 align="center">Enable AI to control your browser</h1>
 
+<!-- mcp-name: io.github.therealtimex/browser-use -->
+
 [![Docs](https://img.shields.io/badge/Docs-📕-blue?style=for-the-badge)](https://docs.browser-use.com)
 [![Browser-use cloud](https://img.shields.io/badge/Browser_Use_Cloud-☁️-blue?style=for-the-badge&logo=rocket&logoColor=white)](https://cloud.browser-use.com)
 
